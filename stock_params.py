@@ -1,19 +1,20 @@
 import consts
 
+
 class StockParams:
     def __init__(self):
         # default value for GCBE and stock price is 0
         self._price = 0.0
         self._annual_dividend = float(
             consts.annualDividend[consts.Global_Beverage_Corporation_Exchange]
-            )
+        )
         self._company_earning = float(
             consts.companyEarning[consts.Global_Beverage_Corporation_Exchange]
-            )
+        )
 
     def _calc_dividend_yield(self, company, price):
         try:
-            self._price = price
+            self._price = float(price)
             # We can have an API implemented if we have 
             # annual Dividend of various companies. For now I am 
             # assuming a dict in consts
@@ -26,12 +27,12 @@ class StockParams:
             div = self._annual_dividend / self._price
         except ZeroDivisionError as err:
             div = 0.0
-            print("Stock price supplied is zero %s",err)
+            print("Stock price supplied is zero %s", err)
         return div
 
     def _calc_ratio(self, company, price):
         try:
-            self._price = price
+            self._price = float(price)
             # We can have an API implemented if we have 
             # Company Earning of various companies. For now I am 
             # assuming a dict in consts
@@ -45,5 +46,5 @@ class StockParams:
             ratio = self._company_earning / self._price
         except ZeroDivisionError as err:
             ratio = 0.0
-            print("Stock price supplied is zero %s",err)
+            print("Stock price supplied is zero %s", err)
         return ratio

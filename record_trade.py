@@ -1,11 +1,10 @@
-
 import sqlite3 as dEntry
-import pandas as pd
-import create_database
-import statistics
-
 from datetime import datetime, timedelta
+
 from scipy.stats.mstats import gmean
+
+import create_database
+
 
 class RecordTrade:
     def __init__(self):
@@ -17,7 +16,7 @@ class RecordTrade:
             # Adding one entry at a time, We can extend this to adding multiple entries at a time
             # by using self.dbRecord.cur.executemany
             self.dbRecord.cur.execute("""INSERT INTO RECORDS (stock, time, quantity, type, price)
-            values(?, ?, ?, ?, ?)""",(stock, time_stamp, quantity, typeStock, price))
+            values(?, ?, ?, ?, ?)""", (stock, time_stamp, quantity, typeStock, price))
             self.dbRecord.con.commit()
             self.status = True
         except dEntry.DatabaseError as e:
@@ -26,15 +25,15 @@ class RecordTrade:
         """
         result=pd.read_sql_query("select * from RECORDS;",self.dbRecord.con)
         print(result)"""
-    
+
     def _get_volume_weighted_average(self, stock):
         # We can even use fetchall and query here 
-        prevTime = datetime.now() - timedelta(minutes = 5)
+        prevTime = datetime.now() - timedelta(minutes=5)
         prev = prevTime.strftime("%d/%m/%Y%H/%M/%S")
         all_entries = []
         # Getting all records of a particular stock
         try:
-            query = ("SELECT * FROM RECORDS WHERE stock = \""+stock+"\"" )
+            query = ("SELECT * FROM RECORDS WHERE stock = \"" + stock + "\"")
             self.dbRecord.cur.execute(query)
             result = self.dbRecord.cur.fetchall()
         except Exception as e:
@@ -46,7 +45,7 @@ class RecordTrade:
                 all_entries.append(row)
         print(self.calcVolume(all_entries))
         return self.calcVolume(all_entries)
-    
+
     def calcVolume(self, entries):
         v = 0.0
         pv = 0.0
@@ -58,12 +57,12 @@ class RecordTrade:
         except ZeroDivisionError as e:
             print(e)
             return 0.0
-        
+
     def _all_shared_index(self):
         try:
             # Getting data of weighted Volume average of less than 5 mins
             wvl = []
-            query = ("SELECT DISTINCT stock FROM RECORDS" )
+            query = ("SELECT DISTINCT stock FROM RECORDS")
             self.dbRecord.cur.execute(query)
             result = self.dbRecord.cur.fetchall()
             print(result)

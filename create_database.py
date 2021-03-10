@@ -1,5 +1,5 @@
 import sqlite3 as dEntry
-import pandas as pd
+
 
 class CreateDB:
     def __init__(self):
